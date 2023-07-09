@@ -20,13 +20,13 @@ function Vehicle(brand, model, year, mileage) {
 }
 
 // Рядковому представленю Vehicle призначаємо функцію яка повертає рядок: <brand> <model> <year>
-Vehicle.toString = function () {
+Vehicle.prototype.toString = function () {
   return `${this.brand} ${this.model} (${this.year})`;
 };
 
 // valueOf - це метод, який використовується JavaScript для конвертації об'єкта в примітивне значення.
 // Ми перевизначаємо його тут, щоб він повертав this.mileage.
-Vehicle.valueOf = function () {
+Vehicle.prototype.valueOf = function () {
   return this.mileage;
 };
 
@@ -201,9 +201,9 @@ myTruck.specific(12000);
 
 // Додаємо метод drive для прототипу Car, який збільшує kilometers на передане число, та виводить Подорожуємо <kilometers> кілометрів у <brand> <model>.
 Car.prototype.drive = function (value) {
-  this.kilometers += value;
+  this.mileage += value;
   console.log(
-    `Подорожуємо ${this.kilometers} кілометрів у ${this.brand} ${this.model}`
+    `Подорожуємо ${this.mileage} кілометрів у ${this.brand} ${this.model}`
   );
 };
 
@@ -231,12 +231,9 @@ driveCar(100);
 
 function ElectricCar(brand, model, year, mileage, batteryCapacity) {
   // Перевіряємо, чи функцію було викликано з new, якщо ні виводимо помилку "Конструктор має бути викликаний з 'new'"
-
-  //////??????????????????????????????????
-  if (!(this instanceof ElectricCar)) {
-    console.log("Конструктор має бути викликаний з 'new'");
+  if (!new.target) {
+    throw new Error("Конструктор має бути викликаний з 'new'");
   }
-  //////??????????????????????????????????
 
   // Викликаємо Car.call та передаємо в нього this, brand, model, year, mileage
   Car.call(this, brand, model, year, mileage);
@@ -267,7 +264,5 @@ const electricCar = new ElectricCar("Tesla", "Model S", 2020, 10000, 100);
  */
 
 // Викликаємо метод toString об'єкту tesla та виводимо в консоль
-//////??????????????????????????????????
 const tesla = electricCar;
 console.log(tesla.toString());
-//////??????????????????????????????????
